@@ -17,9 +17,13 @@ TMP="$BUILDPATH/tmp"
 
 echo -e '\E[32;40m'"Making AD1018 factory image" && tput sgr0
 
-cp openwrt-*-factory.bin ${TMP}/$ROOTFS_FILE
+if [ ! -d "$TMP" ]; then
+    mkdir -p "$TMP"
+fi
 
-cd ${TMP}/
+cp openwrt-*-factory.bin ${TMP}/$ROOTFS_FILE
+cd "$TMP"
+
 echo -e "${ROOTFS_FILE}\t$FWNAME" > ver_info
 echo -e "${CFERAM_FILE}\t${FW_BOOT_VERSION}" >> ver_info
 echo -e "${LIB_FILE}\t${SC_ROOTFS_LIBS_VER}" >> ver_info
@@ -47,7 +51,7 @@ echo -e 'make image done'
 		-i AD1018-not_encrypted.img \
 		-o ${FWNAME}.img
 
-# move the created image image	
+# move the created image
 echo -e "\nmoving image"
 mv -v ${FWNAME}.img "$BUILDPATH"/
 echo -e "done\n"
